@@ -8,3 +8,13 @@
 # or similar. The PRIVATE/INTERFACE/PUBLIC keyword will depend on whether the
 # library is used only in function bodies (PRIVATE), only in function
 # signatures/types (INTERFACE), or both (PUBLIC).
+
+add_executable(blink
+        blink.c
+        )
+
+# pull in common dependencies
+target_link_libraries(blink pico_stdlib)
+
+# create map/bin/hex file etc.
+pico_add_extra_outputs(blink)
