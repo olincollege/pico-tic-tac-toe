@@ -61,6 +61,7 @@ Create a `build` folder. From there run
 
 ```
 $ cmake .. -DPICO_BOARD=pico_w
+$ make
 ```
 
 Alternatively, configure VSCode to build [explained here in section 7](https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf)
@@ -69,4 +70,4 @@ Alternatively, configure VSCode to build [explained here in section 7](https://d
 
 Plug in the Pico to the computer with a micro USB cable while pressing and holding the `BOOTSEL` button. Release the button when the Pico is plugged in. 
 
-Find and copy the UF2 file from the build folder to the Pico (it should appear as a storage device named *RPI-RP2*).*
+Find and copy the UF2 file from `build/src` to the Pico (it should appear as a storage device named *RPI-RP2*).

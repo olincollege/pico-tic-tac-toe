@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 3.13)
 # Pull in SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-# TODO: Define a good project in the line below. If applicable, list other
-# languages in this project managed by CMake.
 project(TicTacToe C CXX ASM)
 
 set(CMAKE_C_STANDARD 11)
