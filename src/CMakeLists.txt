@@ -20,3 +20,15 @@ target_link_libraries(blink
 
 # create map/bin/hex file etc.
 pico_add_extra_outputs(blink)
+
+add_executable(keypad_toggle
+        keypad_toggle.cpp
+        )
+
+target_link_libraries(keypad_toggle
+        pico_stdlib
+        pico_rgb_keypad
+)
+
+# create map/bin/hex file etc.
+pico_add_extra_outputs(keypad_toggle)

@@ -23,6 +23,9 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
     add_compile_options(-Wno-maybe-uninitialized)
 endif()
 
+# Include keypad library
+add_subdirectory(keypad_lib)
+
 # Include the source files.
 add_subdirectory(src)
 
