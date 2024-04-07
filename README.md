@@ -18,7 +18,7 @@ Each unit requires the following hardware:
 
 - [Pimoroni RBG Keypad Base]([Pico RGB Keypad Base](https://shop.pimoroni.com/products/pico-rgb-keypad-base?variant=32369517166675))
 
-## Development Setup Instructions
+## Build Instructions
 
 Create a folder called `pico`. From within this directory, clone this repository.
 
