@@ -9,24 +9,11 @@
 # library is used only in function bodies (PRIVATE), only in function
 # signatures/types (INTERFACE), or both (PUBLIC).
 
-# sanity check that the build system and Pico works
-add_executable(blink
-        blink.c
+add_library(keypad_wrapper
+        keypad_wrapper.cpp
         )
-target_link_libraries(blink
-        pico_stdlib              # for core functionality
-        pico_cyw43_arch_none     # we need Wifi to access the GPIO, but we don't need anything else
-        )
-# create map/bin/hex file etc.
-pico_add_extra_outputs(blink)
-
-# sanity check that the keypad works
-add_executable(keypad_toggle
-        keypad_toggle.cpp
-        )
-target_link_libraries(keypad_toggle
-        pico_stdlib
+target_link_libraries(keypad_wrapper
         pico_rgb_keypad
+        pico_stdlib
         )
-# create map/bin/hex file etc.
-pico_add_extra_outputs(keypad_toggle)
+
