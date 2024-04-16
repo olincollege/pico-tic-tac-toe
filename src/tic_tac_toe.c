@@ -4,29 +4,34 @@
 #include <stdlib.h>
 #include <string.h>
 
-void make_board(board* board_, size_t dim) {
-  board_->dim = dim;
-  for (size_t r = 0; r < dim; r++) {
-    for (size_t c = 0; c < dim; c++) {
-      board_->spaces[r][c] = '_';
+void make_board(board* board_) {
+  board_->dim = sizeof(board_->spaces[0]);
+  for (size_t r = 0; r < board_->dim; r++) {
+    for (size_t c = 0; c < board_->dim; c++) {
+      board_->spaces[r][c] = 0;
     }
   }
+}
+
+void make_player(player* player_, int symb, int turn) {
+  player_->symb = symb;
+  player_->isturn = turn;
 }
 
 int is_space_valid(board* board_, size_t r, size_t c) {
   if (r >= board_->dim || r < 0 || c >= board_->dim || c < 0) {
     return 0;
   }
-  if (board_->spaces[r][c] != '_') {
+  if (board_->spaces[r][c] != 0) {
     return 0;
   }
   return 1;
 }
 
-int is_full(board board_) {
-  for (size_t r = 0; r < board_.dim; r++) {
-    for (size_t c = 0; c < board_.dim; c++) {
-      if (board_.spaces[r][c] == '_') {
+int is_full(board* board_) {
+  for (size_t r = 0; r < board_->dim; r++) {
+    for (size_t c = 0; c < board_->dim; c++) {
+      if (board_->spaces[r][c] == 0) {
         return 0;
       }
     }
@@ -44,15 +49,16 @@ int make_move(player* player_, board* board_, size_t r, size_t c) {
     return -1;
   }
   board_->spaces[r][c] = player_->symb;
+  return 0;
 }
 
-int col_win(player player_, board board_) {
-  for (size_t c = 0; c < board_.dim; c++) {
-    for (size_t r = 0; r < board_.dim; r++) {
-      if (board_.spaces[r][c] != player_.symb) {
+int col_win(player* player_, board* board_) {
+  for (size_t c = 0; c < board_->dim; c++) {
+    for (size_t r = 0; r < board_->dim; r++) {
+      if (board_->spaces[r][c] != player_->symb) {
         break;
       }
-      if (r == board_.dim - 1) {
+      if (r == board_->dim - 1) {
         return 1;
       }
     }
@@ -60,13 +66,13 @@ int col_win(player player_, board board_) {
   return 0;
 }
 
-int row_win(player player_, board board_) {
-  for (size_t r = 0; r < board_.dim; r++) {
-    for (size_t c = 0; c < board_.dim; c++) {
-      if (board_.spaces[r][c] != player_.symb) {
+int row_win(player* player_, board* board_) {
+  for (size_t r = 0; r < board_->dim; r++) {
+    for (size_t c = 0; c < board_->dim; c++) {
+      if (board_->spaces[r][c] != player_->symb) {
         break;
       }
-      if (r == board_.dim - 1) {
+      if (r == board_->dim - 1) {
         return 1;
       }
     }
@@ -74,20 +80,20 @@ int row_win(player player_, board board_) {
   return 0;
 }
 
-int diag_win(player player_, board board_) {
-  for (size_t i = 0; i < board_.dim; i++) {
-    if (board_.spaces[i][i] != player_.symb) {
+int diag_win(player* player_, board* board_) {
+  for (size_t i = 0; i < board_->dim; i++) {
+    if (board_->spaces[i][i] != player_->symb) {
       break;
     }
-    if (i == board_.dim - 1) {
+    if (i == board_->dim - 1) {
       return 1;
     }
   }
-  for (size_t i = 0; i < board_.dim; i++) {
-    if (board_.spaces[board_.dim - i][i] != player_.symb) {
+  for (size_t i = 0; i < board_->dim; i++) {
+    if (board_->spaces[board_->dim - i][i] != player_->symb) {
       break;
     }
-    if (i == board_.dim - 1) {
+    if (i == board_->dim - 1) {
       return 1;
     }
   }
@@ -95,7 +101,7 @@ int diag_win(player player_, board board_) {
   return 0;
 }
 
-int player_win(player player_, board board_) {
+int player_win(player* player_, board* board_) {
   return col_win(player_, board_) || row_win(player_, board_) ||
          diag_win(player_, board_);
 }
