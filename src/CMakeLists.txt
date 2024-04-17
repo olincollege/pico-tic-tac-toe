@@ -8,3 +8,4 @@
 # or similar. The PRIVATE/INTERFACE/PUBLIC keyword will depend on whether the
 # library is used only in function bodies (PRIVATE), only in function
 # signatures/types (INTERFACE), or both (PUBLIC).
+add_library(tic_tac_toe tic_tac_toe.c tic_tac_toe.h)

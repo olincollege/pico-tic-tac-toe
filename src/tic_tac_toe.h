@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 enum { DIM = 4 };
 
 typedef struct {
@@ -41,7 +43,7 @@ void make_player(player* player_, int symb, int turn);
  * @param c The column of the space to check
  * @return 1 if the space is valid, 0 if it is not
  */
-int is_space_valid(board* board_, size_t r, size_t c);
+int is_space_valid(board* board_, size_t row, size_t col);
 
 /**
  * Check if the board has been filled entirely
@@ -51,7 +53,7 @@ int is_space_valid(board* board_, size_t r, size_t c);
  * @param board_ A pointer to the board to check
  * @return 1 if the board is full, 0 if it is not
  */
-int is_full(board board_);
+int is_full(board* board_);
 
 /**
  * Go to the next turn in the game
@@ -74,8 +76,9 @@ void next_turn(player* player1, player* player2);
  * @param board_ A pointer to the game board in use
  * @param r The row of the space to take
  * @param c The column of the space to take
+ * @return 0 if the move is successful, -1 if it is impossible
  */
-int make_move(player* player_, board* board_, size_t r, size_t c);
+int make_move(player* player_, board* board_, size_t row, size_t col);
 
 /**
  * Check if a player has filled a column
