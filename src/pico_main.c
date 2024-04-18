@@ -54,8 +54,19 @@ int main() {
       } else if (game_over == 2) {
         set_full_board(0, 0, 255);
       } else if (game_over == 3) {
-        set_full_board(255, 255, 255);
+        sleep_ms(500);  // see the last move
+        set_full_board(0, 255, 0);
       }
+      // pause for a sec
+      sleep_ms(1000);
+      // set board back to normal
+
+      // reset game
+      make_board(gameboard);
+      set_board(gameboard->spaces);
+      make_player(player1, 1, 1);
+      make_player(player2, 2, 0);
+      game_over = 0;
     }
   }
   return 0;
