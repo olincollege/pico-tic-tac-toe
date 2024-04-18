@@ -20,3 +20,12 @@ target_link_libraries(keypad_wrapper
 add_library(tic_tac_toe
         tic_tac_toe.c
         tic_tac_toe.h)
+
+add_executable(tic_tac_toe_main
+        pico_main.c
+        )
+target_link_libraries(tic_tac_toe_main PRIVATE 
+        tic_tac_toe 
+        keypad_wrapper)
+
+pico_add_extra_outputs(tic_tac_toe_main)
