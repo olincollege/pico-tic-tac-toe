@@ -19,8 +19,22 @@ target_link_libraries(bt_server
 add_executable(tic_tac_toe_main
     pico_main.c
 )
-target_link_libraries(tic_tac_toe_main PRIVATE
+target_link_libraries(tic_tac_toe_main
     bt_server
+    pico_stdlib
+    pico_btstack_ble
+    pico_btstack_cyw43
+    pico_cyw43_arch_none
 )
+
+# For btstack_config.h
+target_include_directories(tic_tac_toe_main PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}
+)
+target_compile_definitions(tic_tac_toe_main PRIVATE
+  RUNNING_AS_CLIENT=1
+)
+
+pico_btstack_make_gatt_header(tic_tac_toe_main PRIVATE "${CMAKE_CURRENT_LIST_DIR}/main.gatt")
 
 pico_add_extra_outputs(tic_tac_toe_main)

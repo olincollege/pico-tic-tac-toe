@@ -26,6 +26,9 @@ endif()
 # Include the source files.
 add_subdirectory(src)
 
+# Include bluetooth
+include_directories(/usr/include/bluetooth)
+
 
 set(CMAKE_C_FLAGS "-Wall -Wextra")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic")
