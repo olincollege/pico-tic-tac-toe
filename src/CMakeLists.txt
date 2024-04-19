@@ -8,3 +8,19 @@
 # or similar. The PRIVATE/INTERFACE/PUBLIC keyword will depend on whether the
 # library is used only in function bodies (PRIVATE), only in function
 # signatures/types (INTERFACE), or both (PUBLIC).
+
+add_library(bt_server
+    bt_server.c
+)
+target_link_libraries(bt_server
+    pico_stdlib
+)
+
+add_executable(tic_tac_toe_main
+    pico_main.c
+)
+target_link_libraries(tic_tac_toe_main PRIVATE
+    bt_server
+)
+
+pico_add_extra_outputs(tic_tac_toe_main)
