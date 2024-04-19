@@ -54,8 +54,8 @@ set(CMAKE_C_CLANG_TIDY "clang-tidy")
 # In current courses that teach C, we use the Criterion testing framework. If
 # If you want to use a different framework, or if you want to skip testing
 # entirely (not recommended), change the lines below.
-# include(CTest)
-# find_library(CRITERION criterion REQUIRED)
-# set(CRITERION_FLAGS --verbose -j1)
+include(CTest)
+find_library(CRITERION criterion REQUIRED)
+set(CRITERION_FLAGS --verbose -j1)
 
-# add_subdirectory(test)
+add_subdirectory(test)
