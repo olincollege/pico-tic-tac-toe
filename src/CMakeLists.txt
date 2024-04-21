@@ -25,6 +25,15 @@ target_link_libraries(tic_tac_toe_main
     pico_btstack_ble
     pico_btstack_cyw43
     pico_cyw43_arch_none
+    hardware_flash
+    hardware_exception
+    # pico_stdlib
+    # pico_btstack_ble
+    # pico_btstack_cyw43
+    # pico_cyw43_driver
+    # hardware_flash
+    # hardware_exception
+    # rp2_common
 )
 
 # For btstack_config.h
@@ -34,6 +43,12 @@ target_include_directories(tic_tac_toe_main PRIVATE
 target_compile_definitions(tic_tac_toe_main PRIVATE
   RUNNING_AS_CLIENT=1
 )
+
+set(BTSTACK_ROOT ${PICO_SDK_PATH}/lib/btstack)
+set(BTSTACK_3RD_PARTY_PATH ${BTSTACK_ROOT}/3rd-party)
+
+# List of examples from btstack
+include(${BTSTACK_ROOT}/example/CMakeLists.txt)
 
 pico_btstack_make_gatt_header(tic_tac_toe_main PRIVATE "${CMAKE_CURRENT_LIST_DIR}/main.gatt")
 

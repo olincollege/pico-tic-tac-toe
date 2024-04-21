@@ -14,6 +14,8 @@ endif()
 
 # Initialize the SDK
 pico_sdk_init()
+set(PICO_BOARD pico_w)
+
 
 add_compile_options(-Wall
         -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
