@@ -44,6 +44,16 @@ target_include_directories(tic_tac_toe_main_server PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}
 )
 
+# Debug printing over usb
+target_compile_definitions(tic_tac_toe_main_server PRIVATE
+  # PICO_DEFAULT_UART=0
+  # PICO_DEFAULT_UART_TX_PIN=0
+  # PICO_DEFAULT_UART_RX_PIN=1
+)
+
+pico_enable_stdio_usb(tic_tac_toe_main_server 1)
+pico_enable_stdio_uart(tic_tac_toe_main_server 0)
+
 set(BTSTACK_ROOT ${PICO_SDK_PATH}/lib/btstack)
 set(BTSTACK_3RD_PARTY_PATH ${BTSTACK_ROOT}/3rd-party)
 
@@ -70,9 +80,18 @@ target_link_libraries(tic_tac_toe_main_client
 target_include_directories(tic_tac_toe_main_client PRIVATE
     ${CMAKE_CURRENT_LIST_DIR} # For btstack config
     )
+
+# Debug printing over usb
+# Set pico as client
 target_compile_definitions(tic_tac_toe_main_client PRIVATE
     RUNNING_AS_CLIENT=1
+    # PICO_DEFAULT_UART=0
+    # PICO_DEFAULT_UART_TX_PIN=0
+    # PICO_DEFAULT_UART_RX_PIN=1
 )
+
+pico_enable_stdio_usb(tic_tac_toe_main_client 1)
+pico_enable_stdio_uart(tic_tac_toe_main_client 0)
 
 pico_add_extra_outputs(tic_tac_toe_main_client)
 
