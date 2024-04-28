@@ -19,6 +19,8 @@
 #define LED_QUICK_FLASH_DELAY_MS 100
 #define LED_SLOW_FLASH_DELAY_MS 1000
 
+bool turn = false;
+
 typedef enum {
   TC_OFF,
   TC_IDLE,
@@ -264,6 +266,8 @@ static void heartbeat_handler(struct btstack_timer_source* ts) {
   } else if (!listener_registered) {
     quick_flash = false;
   }
+
+  // Check if move is new, if so, now player 1's turn
 
   // Restart timer
   btstack_run_loop_set_timer(ts, (led_on || quick_flash)

@@ -64,7 +64,7 @@ static const uint8_t adv_data_len = sizeof(adv_data);
 
 int le_notification_enabled;
 hci_con_handle_t con_handle;
-uint16_t current_temp;
+// uint16_t current_temp;
 
 void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
                     uint16_t size) {
@@ -92,7 +92,8 @@ void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
       gap_advertisements_set_data(adv_data_len, (uint8_t*)adv_data);
       gap_advertisements_enable(1);
 
-      poll_temp();
+      // poll_temp();
+      printf("%zu\n", current_temp);
 
       break;
     case HCI_EVENT_DISCONNECTION_COMPLETE:
@@ -143,20 +144,21 @@ int att_write_callback(hci_con_handle_t connection_handle, uint16_t att_handle,
   return 0;
 }
 
-void poll_temp(void) {
-  static uint8_t deg_c = 3;
-  deg_c++;
-  current_temp = deg_c;
-  printf("Write temp %zu degc\n", deg_c);
+uint8_t current_temp = UINT8_MAX;
+
+void poll_temp(uint8_t move) {
+  // deg_c++;
+  current_temp = move;
+  printf("Write temp %zu degc\n", move);
 }
 
 static void heartbeat_handler(struct btstack_timer_source* ts) {
-  static uint32_t counter = 0;
-  counter++;
+  // static uint32_t counter = 0;
+  // counter++;
 
   // Update the temp every 10s
   if (turn) {
-    poll_temp();
+    poll_temp(7);
     if (le_notification_enabled) {
       att_server_request_can_send_now_event(con_handle);
     }
