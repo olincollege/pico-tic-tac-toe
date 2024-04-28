@@ -19,6 +19,8 @@
 
 #define HEARTBEAT_PERIOD_MS 1000
 
+bool turn = true;
+
 static btstack_timer_source_t heartbeat;
 static btstack_packet_callback_registration_t hci_event_callback_registration;
 
@@ -153,11 +155,12 @@ static void heartbeat_handler(struct btstack_timer_source* ts) {
   counter++;
 
   // Update the temp every 10s
-  if (counter % 1 == 0) {
+  if (turn) {
     poll_temp();
     if (le_notification_enabled) {
       att_server_request_can_send_now_event(con_handle);
     }
+    turn = false;
   }
 
   // Invert the led
@@ -171,6 +174,7 @@ static void heartbeat_handler(struct btstack_timer_source* ts) {
 }
 
 int main(void) {
+  sleep_ms(1000);  // Wait before init so serial dbg can connect first
   // Initalized io via uart
   stdio_init_all();
 
