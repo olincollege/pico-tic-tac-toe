@@ -10,7 +10,7 @@
 # signatures/types (INTERFACE), or both (PUBLIC).
 
 add_executable(tic_tac_toe_main_server
-    pico_main.c 
+    # pico_main.c 
     bt_server.c
 )
 target_link_libraries(tic_tac_toe_main_server
