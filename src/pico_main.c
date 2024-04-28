@@ -18,12 +18,12 @@ static void heartbeat_handler(struct btstack_timer_source* ts) {
   counter++;
 
   // Update the temp every 10s
-  // if (counter % 1 == 0) {
-  //   poll_temp();
-  //   if (le_notification_enabled) {
-  //     att_server_request_can_send_now_event(con_handle);
-  //   }
-  // }
+  if (counter % 1 == 0) {
+    poll_temp();
+    if (le_notification_enabled) {
+      att_server_request_can_send_now_event(con_handle);
+    }
+  }
 
   // Invert the led
   static int led_on = true;

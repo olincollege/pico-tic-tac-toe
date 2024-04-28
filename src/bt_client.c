@@ -309,7 +309,7 @@ int main() {
   // IRQ, so it is fine to call bt_stack_run_loop_execute() but equally you can
   // continue executing user code.
 
-#if 0  // this is only necessary when using polling (which we aren't, but we're
+#if 1  // this is only necessary when using polling (which we aren't, but we're
        // showing it is still safe to call in this case)
   btstack_run_loop_execute();
 #else
@@ -318,13 +318,13 @@ int main() {
   // run loop.
 
   // this is a forever loop in place of where user code would go.
-  uint8_t new_temp = 118;
-  while (true) {
-    gatt_client_write_value_of_characteristic(
-        handle_gatt_client_event, connection_handle,
-        ORG_BLUETOOTH_SERVICE_ENVIRONMENTAL_SENSING, 1, &new_temp);
-    sleep_ms(1000);
-  }
+  // uint8_t new_temp = 118;
+  // while (true) {
+  //   gatt_client_write_value_of_characteristic(
+  //       handle_gatt_client_event, connection_handle,
+  //       ORG_BLUETOOTH_SERVICE_ENVIRONMENTAL_SENSING, 1, &new_temp);
+  //   sleep_ms(1000);
+  // }
 #endif
   return 0;
 }
