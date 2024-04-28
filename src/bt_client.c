@@ -163,8 +163,8 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
           const uint8_t* value = gatt_event_notification_get_value(packet);
           DEBUG_LOG("Indication value len %d\n", value_length);
           if (value_length == 2) {
-            float temp = little_endian_read_16(value, 0);
-            printf("read temp %.2f degc\n", temp / 100);
+            uint8_t turn = little_endian_read_16(value, 0);
+            printf("Turn %f\n", value);
           } else {
             printf("Unexpected length %d\n", value_length);
           }
