@@ -148,8 +148,8 @@ void poll_temp(void) {
   // The temperature sensor measures the Vbe voltage of a biased bipolar diode,
   // connected to the fifth ADC channel Typically, Vbe = 0.706V at 27 degrees C,
   // with a slope of -1.721mV (0.001721) per degree.
-  static float deg_c = 17.69;
+  static uint8_t deg_c = 3;
   deg_c++;
-  current_temp = deg_c * 100;
-  printf("Write temp %.2f degc\n", deg_c);
+  current_temp = deg_c;
+  printf("Write temp %zu degc\n", deg_c);
 }
