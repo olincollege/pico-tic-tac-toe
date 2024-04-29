@@ -5,7 +5,9 @@
 static btstack_timer_source_t heartbeat;
 static btstack_packet_callback_registration_t hci_event_callback_registration;
 
-static void heartbeat_handler(struct btstack_timer_source* ts) {
+bool turn = true;
+
+static void server_heartbeat_handler(struct btstack_timer_source* ts) {
   // static uint32_t counter = 0;
   // counter++;
 
@@ -53,7 +55,7 @@ int main(void) {
   att_server_register_packet_handler(packet_handler);
 
   // set one-shot btstack timer
-  heartbeat.process = &heartbeat_handler;
+  heartbeat.process = &server_heartbeat_handler;
   btstack_run_loop_set_timer(&heartbeat, HEARTBEAT_PERIOD_MS);
   btstack_run_loop_add_timer(&heartbeat);
 

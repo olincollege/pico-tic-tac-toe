@@ -9,7 +9,6 @@
 
 #define HEARTBEAT_PERIOD_MS 1000
 
-extern bool turn;
 extern uint8_t current_temp;
 
 // static btstack_timer_source_t heartbeat;

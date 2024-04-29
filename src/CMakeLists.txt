@@ -32,12 +32,20 @@ target_link_libraries(bt_server
     pico_btstack_cyw43
     player_0_gatt
 )
+target_link_libraries(bt_client
+    pico_stdlib
+    pico_btstack_cyw43
+    pico_cyw43_arch_none
+    pico_btstack_ble
+)
 
 # For btstack_config.h
 target_include_directories(bt_server PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}
 )
-
+target_include_directories(bt_client PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}
+)
 
 
 add_executable(tic_tac_toe_main_server
@@ -110,6 +118,7 @@ target_link_libraries(tic_tac_toe_main_client
     pico_btstack_cyw43
     pico_cyw43_arch_none
     hardware_adc
+    bt_client
     )
 target_include_directories(tic_tac_toe_main_client PRIVATE
     ${CMAKE_CURRENT_LIST_DIR} # For btstack config

@@ -9,7 +9,6 @@
 #include "pico/stdlib.h"
 // #include "player_0_gatt.h"
 
-bool turn = true;
 uint8_t current_temp = UINT8_MAX;
 
 hci_con_handle_t con_handle;
