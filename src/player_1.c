@@ -1,10 +1,35 @@
 #include <stdio.h>
 
+#define PLAYER_1 1
 #include "bt_client.h"
+#include "bt_server.h"
 
 bool turn = false;
 
-static void heartbeat_handler(struct btstack_timer_source* ts) {
+static void server_heartbeat_handler(struct btstack_timer_source* ts) {
+  // static uint32_t counter = 0;
+  // counter++;
+
+  // Update the temp every 10s
+  if (turn) {
+    poll_temp(19);
+    if (le_notification_enabled) {
+      att_server_request_can_send_now_event(con_handle);
+    }
+    turn = false;
+  }
+
+  // Invert the led
+  static int led_on = true;
+  led_on = !led_on;
+  cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, led_on);
+
+  // Restart timer
+  btstack_run_loop_set_timer(ts, HEARTBEAT_PERIOD_MS);
+  btstack_run_loop_add_timer(ts);
+}
+
+static void client_heartbeat_handler(struct btstack_timer_source* ts) {
   // Invert the led
   static bool quick_flash;
   static bool led_on = true;
@@ -50,7 +75,7 @@ int main() {
   hci_add_event_handler(&hci_event_callback_registration);
 
   // set one-shot btstack timer
-  heartbeat.process = &heartbeat_handler;
+  heartbeat.process = &client_heartbeat_handler;
   btstack_run_loop_set_timer(&heartbeat, LED_SLOW_FLASH_DELAY_MS);
   btstack_run_loop_add_timer(&heartbeat);
 

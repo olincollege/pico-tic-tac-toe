@@ -1,9 +1,7 @@
 #include <stdio.h>
 
+#define PLAYER_0 1
 #include "bt_server.h"
-
-static btstack_timer_source_t heartbeat;
-static btstack_packet_callback_registration_t hci_event_callback_registration;
 
 bool turn = true;
 

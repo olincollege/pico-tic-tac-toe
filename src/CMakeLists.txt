@@ -13,6 +13,9 @@
 add_library(player_0_gatt
     player_0_gatt.c
 )
+add_library(player_1_gatt
+    player_1_gatt.c
+)
 
 # bt libs
 add_library(bt_server
@@ -22,7 +25,9 @@ add_library(bt_client
     bt_client.c
 )
 
+# gatt generation
 # pico_btstack_make_gatt_header(bt_server PRIVATE "${CMAKE_CURRENT_LIST_DIR}/player_0_gatt.gatt")
+# pico_btstack_make_gatt_header(bt_server PRIVATE "${CMAKE_CURRENT_LIST_DIR}/player_1_gatt.gatt")
 
 # link deps to bt libs
 target_link_libraries(bt_server
@@ -31,6 +36,7 @@ target_link_libraries(bt_server
     pico_cyw43_arch_none
     pico_btstack_cyw43
     player_0_gatt
+    player_1_gatt
 )
 target_link_libraries(bt_client
     pico_stdlib
@@ -118,6 +124,8 @@ target_link_libraries(tic_tac_toe_main_client
     pico_btstack_cyw43
     pico_cyw43_arch_none
     hardware_adc
+    bt_client
+    player_1_gatt
     bt_client
     )
 target_include_directories(tic_tac_toe_main_client PRIVATE

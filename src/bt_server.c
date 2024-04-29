@@ -13,6 +13,8 @@ uint8_t current_temp = UINT8_MAX;
 
 hci_con_handle_t con_handle;
 int le_notification_enabled;
+btstack_timer_source_t heartbeat;
+btstack_packet_callback_registration_t hci_event_callback_registration;
 
 void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
                     uint16_t size) {

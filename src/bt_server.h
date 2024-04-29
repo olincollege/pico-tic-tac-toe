@@ -7,13 +7,20 @@
 #include "pico/stdlib.h"
 #include "player_0_gatt.h"
 
+// Set gatt based on player
+#ifdef PLAYER_0
+#include "player_0_gatt.h"
+#endif
+#ifdef PLAYER_1
+#include "player_1_gatt.h"
+#endif
+
 #define HEARTBEAT_PERIOD_MS 1000
 
 extern uint8_t current_temp;
 
-// static btstack_timer_source_t heartbeat;
-// static btstack_packet_callback_registration_t
-// hci_event_callback_registration;
+extern btstack_timer_source_t heartbeat;
+extern btstack_packet_callback_registration_t hci_event_callback_registration;
 
 #define APP_AD_FLAGS 0x06
 static uint8_t adv_data[] = {
