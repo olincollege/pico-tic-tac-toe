@@ -69,11 +69,25 @@ int main() {
   // Unsure what this does
   sm_set_io_capabilities(IO_CAPABILITY_NO_INPUT_NO_OUTPUT);
 
+  // Set up server
   // setup empty ATT server - only needed if LE Peripheral does ATT queries on
   // its own, e.g. Android and iOS
   // att_server_init(profile_data, att_read_callback, att_write_callback);
   att_server_init(profile_data, att_read_callback, att_write_callback);
 
+  // inform about BTstack state
+  server_hci_event_callback_registration.callback = &packet_handler;
+  hci_add_event_handler(&server_hci_event_callback_registration);
+
+  // register for ATT event
+  att_server_register_packet_handler(packet_handler);
+
+  // set one-shot btstack timer
+  server_heartbeat.process = &server_heartbeat_handler;
+  btstack_run_loop_set_timer(&server_heartbeat, HEARTBEAT_PERIOD_MS);
+  btstack_run_loop_add_timer(&server_heartbeat);
+
+  // Set up client
   gatt_client_init();
 
   client_hci_event_callback_registration.callback = &hci_event_handler;
