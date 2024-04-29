@@ -11,7 +11,8 @@
 
 add_executable(tic_tac_toe_main_server
     # pico_main.c 
-    bt_server.c
+    player_0.c
+    # bt_server.c
 )
 target_link_libraries(tic_tac_toe_main_server
   pico_stdlib
@@ -68,7 +69,7 @@ pico_add_extra_outputs(tic_tac_toe_main_server)
 
 
 add_executable(tic_tac_toe_main_client
-    bt_client.c
+    player_1.c
     )
 target_link_libraries(tic_tac_toe_main_client
     pico_stdlib
