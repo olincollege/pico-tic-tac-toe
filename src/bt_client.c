@@ -6,14 +6,11 @@
 
 #include <stdio.h>
 
-// #include "bt_client_server_functionality.h"
 #include "btstack.h"
-// #include "main.h"
-// #include "bt_server.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 
-#if 1
+#if 0
 #define DEBUG_LOG(...) printf(__VA_ARGS__)
 #else
 #define DEBUG_LOG(...)
@@ -23,16 +20,6 @@
 #define LED_SLOW_FLASH_DELAY_MS 1000
 
 bool turn = false;
-
-void toggle_turn(void) {
-  turn = !turn;
-
-  if (turn) {
-    printf("Waiting for player 1's turn\n");
-  } else {
-    printf("Waiting for player 0's turn\n");
-  }
-}
 
 typedef enum {
   TC_OFF,
@@ -177,45 +164,14 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
               gatt_event_notification_get_value_length(packet);
           const uint8_t* value = gatt_event_notification_get_value(packet);
           DEBUG_LOG("Indication value len %d\n", value_length);
-          if (value_length == 1) {
+          if (value_length == 2) {
             uint8_t temp = little_endian_read_16(value, 0);
             printf("read temp %zu degc\n", temp);
-            toggle_turn();
           } else {
             printf("Unexpected length %d\n", value_length);
           }
           break;
         }
-        case GATT_EVENT_QUERY_COMPLETE:
-          att_status = gatt_event_query_complete_get_att_status(packet);
-          printf("RET STATUS ALT: %zu\n", att_status);
-          if (att_status != ATT_ERROR_SUCCESS) {
-            printf("GATT_EVENT_QUERY_COMPLETE, ATT Error 0x%02x.\n",
-                   att_status);
-            // gap_disconnect(connection_handle);
-          }
-          break;
-        case GATT_EVENT_CHARACTERISTIC_VALUE_QUERY_RESULT:
-          att_status = gatt_event_query_complete_get_att_status(packet);
-          if (att_status != ATT_ERROR_SUCCESS) {
-            // printf(
-            //     "GATT_EVENT_CHARACTERISTIC_VALUE_QUERY_RESULT, ATT Error "
-            //     "0x%02x.\n",
-            //     att_status);
-            // gap_disconnect(connection_handle);
-          }
-          uint16_t value_length =
-              gatt_event_notification_get_value_length(packet);
-          const uint8_t* value = gatt_event_notification_get_value(packet);
-          // DEBUG_LOG("Indication value len %d\n", value_length);
-          if (value_length == 1) {
-            uint8_t temp = little_endian_read_16(value, 0);
-            // printf("read temp %zu degc\n", temp);
-            toggle_turn();
-          } else {
-            // printf("Unexpected length %d\n", value_length);
-          }
-          break;
         default:
           printf("Unknown packet type 0x%02x\n",
                  hci_event_packet_get_type(packet));
@@ -312,27 +268,6 @@ static void heartbeat_handler(struct btstack_timer_source* ts) {
   }
 
   // Check if move is new, if so, now player 1's turn
-  // if (turn) {
-  // state = TC_IDLE;
-  // printf("BT State: %i\n", state);
-  // uint8_t write_buffer = 118;
-  // // if (state == TC_W4_READY) {
-  // uint8_t ret = gatt_client_write_value_of_characteristic(
-  //     connection_handle, 0x0009, 1, &write_buffer);
-  // printf("Ret of gatt_write: %zu\n", ret);
-  // }
-  // int ret =
-  //     att_write_callback(connection_handle, 0x0009, NULL, 0, &write_buffer,
-  //     1);
-
-  // WORKING!!!
-  // uint8_t ret = gatt_client_read_value_of_characteristic_using_value_handle(
-  //     handle_gatt_client_event, connection_handle, 0x0009);
-
-  // gatt_client_send()
-  // gatt_client_send(gatt_client, )
-  //   toggle_turn();
-  // }
 
   // Restart timer
   btstack_run_loop_set_timer(ts, (led_on || quick_flash)
@@ -342,7 +277,6 @@ static void heartbeat_handler(struct btstack_timer_source* ts) {
 }
 
 int main() {
-  sleep_ms(1000);  // Wait before init so serial dbg can connect first
   stdio_init_all();
 
   // initialize CYW43 driver architecture (will enable BT if/because
@@ -354,9 +288,7 @@ int main() {
 
   l2cap_init();
   sm_init();
-
-  // // Unsure what this does
-  // sm_set_io_capabilities(IO_CAPABILITY_NO_INPUT_NO_OUTPUT);
+  sm_set_io_capabilities(IO_CAPABILITY_NO_INPUT_NO_OUTPUT);
 
   // setup empty ATT server - only needed if LE Peripheral does ATT queries on
   // its own, e.g. Android and iOS
@@ -391,11 +323,12 @@ int main() {
 
   // this is a forever loop in place of where user code would go.
   // uint8_t new_temp = 118;
-  while (true) {
-    // gatt_client_write_value_of_characteristic(
-    //     handle_gatt_client_event, connection_handle,
-    //     ORG_BLUETOOTH_SERVICE_ENVIRONMENTAL_SENSING, 1, &new_temp);
-  }
+  // while (true) {
+  //   gatt_client_write_value_of_characteristic(
+  //       handle_gatt_client_event, connection_handle,
+  //       ORG_BLUETOOTH_SERVICE_ENVIRONMENTAL_SENSING, 1, &new_temp);
+  //   sleep_ms(1000);
+  // }
 #endif
   return 0;
 }
