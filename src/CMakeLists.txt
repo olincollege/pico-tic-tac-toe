@@ -9,6 +9,37 @@
 # library is used only in function bodies (PRIVATE), only in function
 # signatures/types (INTERFACE), or both (PUBLIC).
 
+# gatt libs
+add_library(player_0_gatt
+    player_0_gatt.c
+)
+
+# bt libs
+add_library(bt_server
+    bt_server.c
+)
+add_library(bt_client
+    bt_client.c
+)
+
+# pico_btstack_make_gatt_header(bt_server PRIVATE "${CMAKE_CURRENT_LIST_DIR}/player_0_gatt.gatt")
+
+# link deps to bt libs
+target_link_libraries(bt_server
+    pico_stdlib
+    pico_btstack_ble
+    pico_cyw43_arch_none
+    pico_btstack_cyw43
+    player_0_gatt
+)
+
+# For btstack_config.h
+target_include_directories(bt_server PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}
+)
+
+
+
 add_executable(tic_tac_toe_main_server
     # pico_main.c 
     player_0.c
@@ -20,6 +51,8 @@ target_link_libraries(tic_tac_toe_main_server
   pico_btstack_cyw43
   pico_cyw43_arch_none
   hardware_adc
+  bt_server
+  player_0_gatt
 # bt_server
     # pico_stdlib
     # pico_btstack_ble
@@ -61,7 +94,7 @@ set(BTSTACK_3RD_PARTY_PATH ${BTSTACK_ROOT}/3rd-party)
 # List of examples from btstack
 include(${BTSTACK_ROOT}/example/CMakeLists.txt)
 
-pico_btstack_make_gatt_header(tic_tac_toe_main_server PRIVATE "${CMAKE_CURRENT_LIST_DIR}/main.gatt")
+# pico_btstack_make_gatt_header(tic_tac_toe_main_server PRIVATE "${CMAKE_CURRENT_LIST_DIR}/main.gatt")
 
 pico_add_extra_outputs(tic_tac_toe_main_server)
 
