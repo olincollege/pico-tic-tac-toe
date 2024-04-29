@@ -46,9 +46,10 @@ target_include_directories(tic_tac_toe_main_server PRIVATE
 
 # Debug printing over usb
 target_compile_definitions(tic_tac_toe_main_server PRIVATE
-  # PICO_DEFAULT_UART=0
-  # PICO_DEFAULT_UART_TX_PIN=0
-  # PICO_DEFAULT_UART_RX_PIN=1
+    RUNNING_AS_CLIENT=1
+    # PICO_DEFAULT_UART=0
+    # PICO_DEFAULT_UART_TX_PIN=0
+    # PICO_DEFAULT_UART_RX_PIN=1
 )
 
 pico_enable_stdio_usb(tic_tac_toe_main_server 1)
@@ -69,6 +70,7 @@ pico_add_extra_outputs(tic_tac_toe_main_server)
 
 add_executable(tic_tac_toe_main_client
     bt_client.c
+    # bt_client_server_functionality.c
     )
 target_link_libraries(tic_tac_toe_main_client
     pico_stdlib
@@ -92,6 +94,8 @@ target_compile_definitions(tic_tac_toe_main_client PRIVATE
 
 pico_enable_stdio_usb(tic_tac_toe_main_client 1)
 pico_enable_stdio_uart(tic_tac_toe_main_client 0)
+
+# pico_btstack_make_gatt_header(tic_tac_toe_main_client PRIVATE "${CMAKE_CURRENT_LIST_DIR}/main.gatt")
 
 pico_add_extra_outputs(tic_tac_toe_main_client)
 

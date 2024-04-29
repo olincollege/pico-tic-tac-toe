@@ -8,7 +8,6 @@
 
 #include <stdio.h>
 
-#include "bt_server.h"
 #include "btstack.h"
 #include "btstack_config.h"
 #include "hardware/adc.h"
@@ -66,6 +65,8 @@ int le_notification_enabled;
 hci_con_handle_t con_handle;
 // uint16_t current_temp;
 
+uint16_t value_length;
+
 void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
                     uint16_t size) {
   UNUSED(size);
@@ -105,8 +106,38 @@ void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
           ATT_CHARACTERISTIC_ORG_BLUETOOTH_CHARACTERISTIC_TEMPERATURE_01_VALUE_HANDLE,
           (uint8_t*)&current_temp, sizeof(current_temp));
       break;
-    default:
+    case HCI_EVENT_TRANSPORT_PACKET_SENT:
+      // printf("HERE: %02x\n", hci_event_packet_get_type(packet));
+      // uint16_t value_length =
+      // gatt_event_notification_get_value_length(packet); printf("Packet length
+      // %d\n", value_length); const uint8_t* value =
+      // gatt_event_notification_get_value(packet);
+      // // DEBUG_LOG("Indication value len %d\n", value_length);
+      // uint8_t temp = little_endian_read_16(value, 0);
+      // printf("Value %zu degc\n", temp);
+      // if (value_length == 1) {
+      //   // toggle_turn();
+      // } else {
+      //   // printf("Unexpected length %d\n", value_length);
+      // }
       break;
+    default:
+      //     // value_length = gatt_event_notification_get_value_length(packet);
+      //     // printf("Packet length %d\n", value_length);
+      break;
+      //     printf("HERE: %02x\n", hci_event_packet_get_type(packet));
+      //     uint16_t value_length =
+      //     gatt_event_notification_get_value_length(packet); printf("Packet
+      //     length %d\n", value_length); const uint8_t* value =
+      //     gatt_event_notification_get_value(packet);
+      //     // DEBUG_LOG("Indication value len %d\n", value_length);
+      //     uint8_t temp = little_endian_read_16(value, 0);
+      //     printf("Value %zu degc\n", temp);
+      //     if (value_length == 1) {
+      //       // toggle_turn();
+      //     } else {
+      //       // printf("Unexpected length %d\n", value_length);
+      //     }
   }
 }
 
@@ -164,6 +195,19 @@ static void heartbeat_handler(struct btstack_timer_source* ts) {
     }
     turn = false;
   }
+  static uint8_t read_buffer;
+  uint16_t ret = att_read_callback(
+      con_handle,
+      ATT_CHARACTERISTIC_ORG_BLUETOOTH_CHARACTERISTIC_TEMPERATURE_01_VALUE_HANDLE,
+      0, &read_buffer, 1);
+
+  // att_write_callback(
+  //     con_handle,
+  //     ATT_CHARACTERISTIC_ORG_BLUETOOTH_CHARACTERISTIC_TEMPERATURE_01_VALUE_HANDLE,
+  //     NULL, 0, &read_buffer, 1);
+
+  // printf("Ret from att read: %zu\n", ret);
+  printf("Read buffer: %zu\n", read_buffer);
 
   // Invert the led
   static int led_on = true;
