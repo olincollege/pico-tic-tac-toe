@@ -10,8 +10,9 @@
 
 #define HEARTBEAT_PERIOD_MS 1000
 
-static btstack_timer_source_t heartbeat;
-static btstack_packet_callback_registration_t hci_event_callback_registration;
+// static btstack_timer_source_t heartbeat;
+// static btstack_packet_callback_registration_t
+// hci_event_callback_registration;
 
 static void heartbeat_handler(struct btstack_timer_source* ts) {
   static uint32_t counter = 0;

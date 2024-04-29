@@ -19,8 +19,9 @@
 
 extern uint8_t current_temp;
 
-extern btstack_timer_source_t heartbeat;
-extern btstack_packet_callback_registration_t hci_event_callback_registration;
+extern btstack_timer_source_t server_heartbeat;
+extern btstack_packet_callback_registration_t
+    server_hci_event_callback_registration;
 
 #define APP_AD_FLAGS 0x06
 static uint8_t adv_data[] = {

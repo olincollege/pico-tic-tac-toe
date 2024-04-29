@@ -6,7 +6,7 @@
 #define DEBUG_LOG(...)
 #endif
 
-btstack_packet_callback_registration_t server_hci_event_callback_registration;
+btstack_packet_callback_registration_t client_hci_event_callback_registration;
 gc_state_t state = TC_OFF;
 bd_addr_t server_addr;
 bd_addr_type_t server_addr_type;

@@ -73,12 +73,11 @@ int main() {
   // its own, e.g. Android and iOS
   // att_server_init(profile_data, att_read_callback, att_write_callback);
   att_server_init(profile_data, att_read_callback, att_write_callback);
-  // att_server_init(NULL, NULL, NULL);
 
   gatt_client_init();
 
-  server_hci_event_callback_registration.callback = &hci_event_handler;
-  hci_add_event_handler(&server_hci_event_callback_registration);
+  client_hci_event_callback_registration.callback = &hci_event_handler;
+  hci_add_event_handler(&client_hci_event_callback_registration);
 
   // set one-shot btstack timer
   client_heartbeat.process = &client_heartbeat_handler;

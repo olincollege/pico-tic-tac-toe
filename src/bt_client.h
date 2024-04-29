@@ -25,7 +25,7 @@ typedef enum {
 } gc_state_t;
 
 extern btstack_packet_callback_registration_t
-    server_hci_event_callback_registration;
+    client_hci_event_callback_registration;
 extern gc_state_t state;
 extern bd_addr_t server_addr;
 extern bd_addr_type_t server_addr_type;

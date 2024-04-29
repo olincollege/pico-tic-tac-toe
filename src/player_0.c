@@ -46,16 +46,16 @@ int main(void) {
   att_server_init(profile_data, att_read_callback, att_write_callback);
 
   // inform about BTstack state
-  hci_event_callback_registration.callback = &packet_handler;
-  hci_add_event_handler(&hci_event_callback_registration);
+  server_hci_event_callback_registration.callback = &packet_handler;
+  hci_add_event_handler(&server_hci_event_callback_registration);
 
   // register for ATT event
   att_server_register_packet_handler(packet_handler);
 
   // set one-shot btstack timer
-  heartbeat.process = &server_heartbeat_handler;
-  btstack_run_loop_set_timer(&heartbeat, HEARTBEAT_PERIOD_MS);
-  btstack_run_loop_add_timer(&heartbeat);
+  server_heartbeat.process = &server_heartbeat_handler;
+  btstack_run_loop_set_timer(&server_heartbeat, HEARTBEAT_PERIOD_MS);
+  btstack_run_loop_add_timer(&server_heartbeat);
 
   // turn on bluetooth!
   hci_power_control(HCI_POWER_ON);
