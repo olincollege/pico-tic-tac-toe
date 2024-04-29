@@ -24,7 +24,8 @@ typedef enum {
   TC_W4_READY
 } gc_state_t;
 
-extern btstack_packet_callback_registration_t hci_event_callback_registration;
+extern btstack_packet_callback_registration_t
+    server_hci_event_callback_registration;
 extern gc_state_t state;
 extern bd_addr_t server_addr;
 extern bd_addr_type_t server_addr_type;
@@ -33,7 +34,7 @@ extern gatt_client_service_t server_service;
 extern gatt_client_characteristic_t server_characteristic;
 extern bool listener_registered;
 extern gatt_client_notification_t notification_listener;
-extern btstack_timer_source_t heartbeat;
+extern btstack_timer_source_t client_heartbeat;
 
 bool advertisement_report_contains_service(uint16_t service,
                                            uint8_t* advertisement_report);

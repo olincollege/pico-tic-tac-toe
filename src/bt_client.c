@@ -6,7 +6,7 @@
 #define DEBUG_LOG(...)
 #endif
 
-btstack_packet_callback_registration_t hci_event_callback_registration;
+btstack_packet_callback_registration_t server_hci_event_callback_registration;
 gc_state_t state = TC_OFF;
 bd_addr_t server_addr;
 bd_addr_type_t server_addr_type;
@@ -15,7 +15,7 @@ gatt_client_service_t server_service;
 gatt_client_characteristic_t server_characteristic;
 bool listener_registered;
 gatt_client_notification_t notification_listener;
-btstack_timer_source_t heartbeat;
+btstack_timer_source_t client_heartbeat;
 
 bool advertisement_report_contains_service(uint16_t service,
                                            uint8_t* advertisement_report) {

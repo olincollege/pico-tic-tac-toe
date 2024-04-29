@@ -52,6 +52,8 @@ static void client_heartbeat_handler(struct btstack_timer_source* ts) {
 }
 
 int main() {
+  sleep_ms(1000);  // Wait before init so serial dbg can connect first
+  // Initalized io via uart
   stdio_init_all();
 
   // initialize CYW43 driver architecture (will enable BT if/because
@@ -63,21 +65,25 @@ int main() {
 
   l2cap_init();
   sm_init();
+
+  // Unsure what this does
   sm_set_io_capabilities(IO_CAPABILITY_NO_INPUT_NO_OUTPUT);
 
   // setup empty ATT server - only needed if LE Peripheral does ATT queries on
   // its own, e.g. Android and iOS
-  att_server_init(NULL, NULL, NULL);
+  // att_server_init(profile_data, att_read_callback, att_write_callback);
+  att_server_init(profile_data, att_read_callback, att_write_callback);
+  // att_server_init(NULL, NULL, NULL);
 
   gatt_client_init();
 
-  hci_event_callback_registration.callback = &hci_event_handler;
-  hci_add_event_handler(&hci_event_callback_registration);
+  server_hci_event_callback_registration.callback = &hci_event_handler;
+  hci_add_event_handler(&server_hci_event_callback_registration);
 
   // set one-shot btstack timer
-  heartbeat.process = &client_heartbeat_handler;
-  btstack_run_loop_set_timer(&heartbeat, LED_SLOW_FLASH_DELAY_MS);
-  btstack_run_loop_add_timer(&heartbeat);
+  client_heartbeat.process = &client_heartbeat_handler;
+  btstack_run_loop_set_timer(&client_heartbeat, LED_SLOW_FLASH_DELAY_MS);
+  btstack_run_loop_add_timer(&client_heartbeat);
 
   // turn on!
   hci_power_control(HCI_POWER_ON);

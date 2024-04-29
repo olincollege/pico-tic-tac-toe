@@ -55,16 +55,14 @@ target_include_directories(bt_client PRIVATE
 
 
 add_executable(tic_tac_toe_main_server
-    # pico_main.c 
     player_0.c
-    # bt_server.c
 )
+
 target_link_libraries(tic_tac_toe_main_server
   pico_stdlib
   pico_btstack_ble
   pico_btstack_cyw43
   pico_cyw43_arch_none
-  hardware_adc
   bt_server
   player_0_gatt
 # bt_server
@@ -91,12 +89,9 @@ target_link_libraries(tic_tac_toe_main_server
 target_include_directories(tic_tac_toe_main_server PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}
 )
-
-# Debug printing over usb
+# Set pico as client
 target_compile_definitions(tic_tac_toe_main_server PRIVATE
-  # PICO_DEFAULT_UART=0
-  # PICO_DEFAULT_UART_TX_PIN=0
-  # PICO_DEFAULT_UART_RX_PIN=1
+    RUNNING_AS_CLIENT=1
 )
 
 pico_enable_stdio_usb(tic_tac_toe_main_server 1)
@@ -117,16 +112,16 @@ pico_add_extra_outputs(tic_tac_toe_main_server)
 
 add_executable(tic_tac_toe_main_client
     player_1.c
-    )
+)
+
 target_link_libraries(tic_tac_toe_main_client
     pico_stdlib
     pico_btstack_ble
     pico_btstack_cyw43
     pico_cyw43_arch_none
-    hardware_adc
     bt_client
     player_1_gatt
-    bt_client
+    bt_server
     )
 target_include_directories(tic_tac_toe_main_client PRIVATE
     ${CMAKE_CURRENT_LIST_DIR} # For btstack config
@@ -136,9 +131,6 @@ target_include_directories(tic_tac_toe_main_client PRIVATE
 # Set pico as client
 target_compile_definitions(tic_tac_toe_main_client PRIVATE
     RUNNING_AS_CLIENT=1
-    # PICO_DEFAULT_UART=0
-    # PICO_DEFAULT_UART_TX_PIN=0
-    # PICO_DEFAULT_UART_RX_PIN=1
 )
 
 pico_enable_stdio_usb(tic_tac_toe_main_client 1)
