@@ -65,6 +65,7 @@ target_link_libraries(tic_tac_toe_main_server
   pico_cyw43_arch_none
   bt_server
   player_0_gatt
+  bt_client
 # bt_server
     # pico_stdlib
     # pico_btstack_ble
