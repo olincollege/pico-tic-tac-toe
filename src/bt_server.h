@@ -6,6 +6,7 @@
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "player_0_gatt.h"
+#include "player_1_gatt.h"
 
 // Set gatt based on player
 #ifdef PLAYER_0
@@ -17,7 +18,10 @@
 
 #define HEARTBEAT_PERIOD_MS 1000
 
-extern uint8_t current_temp;
+// extern bool turn;
+// extern bool turn_complete;
+// extern uint8_t last_move;
+// extern uint8_t move;
 
 extern btstack_timer_source_t server_heartbeat;
 extern btstack_packet_callback_registration_t

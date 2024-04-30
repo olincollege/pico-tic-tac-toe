@@ -9,7 +9,14 @@
 #include "pico/stdlib.h"
 // #include "player_0_gatt.h"
 
-uint8_t current_temp = UINT8_MAX;
+typedef struct {
+  bool turn;
+  bool turn_complete;
+  uint8_t last_move;
+  uint8_t move;
+} player_t;
+
+extern player_t player;
 
 hci_con_handle_t con_handle;
 int le_notification_enabled;
@@ -43,17 +50,21 @@ void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
       gap_advertisements_enable(1);
 
       // poll_temp();
-      printf("%zu\n", current_temp);
+      // printf("%zu\n", player.move);
 
       break;
     case HCI_EVENT_DISCONNECTION_COMPLETE:
       le_notification_enabled = 0;
       break;
     case ATT_EVENT_CAN_SEND_NOW:
+      printf("Send %zu\n", player.move);
+      player.last_move = player.move;
+      player.turn = false;
+      player.turn_complete = false;
       att_server_notify(
           con_handle,
           ATT_CHARACTERISTIC_ORG_BLUETOOTH_CHARACTERISTIC_TEMPERATURE_01_VALUE_HANDLE,
-          (uint8_t*)&current_temp, sizeof(current_temp));
+          (uint8_t*)&player.move, sizeof(player.move));
       break;
     default:
       break;
@@ -67,8 +78,8 @@ uint16_t att_read_callback(hci_con_handle_t connection_handle,
 
   if (att_handle ==
       ATT_CHARACTERISTIC_ORG_BLUETOOTH_CHARACTERISTIC_TEMPERATURE_01_VALUE_HANDLE) {
-    return att_read_callback_handle_blob((const uint8_t*)&current_temp,
-                                         sizeof(current_temp), offset, buffer,
+    return att_read_callback_handle_blob((const uint8_t*)&player.move,
+                                         sizeof(player.move), offset, buffer,
                                          buffer_size);
   }
   return 0;
@@ -96,8 +107,8 @@ int att_write_callback(hci_con_handle_t connection_handle, uint16_t att_handle,
 
 void poll_temp(uint8_t move) {
   // deg_c++;
-  current_temp = move;
-  printf("Write temp %zu degc\n", move);
+  player.move = move;
+  printf("Write temp %zu degc\n", player.move);
 }
 
 // static void heartbeat_handler(struct btstack_timer_source* ts) {

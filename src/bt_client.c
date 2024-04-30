@@ -6,6 +6,15 @@
 #define DEBUG_LOG(...)
 #endif
 
+typedef struct {
+  bool turn;
+  bool turn_complete;
+  uint8_t last_move;
+  uint8_t move;
+} player_t;
+
+extern player_t player;
+
 btstack_packet_callback_registration_t client_hci_event_callback_registration;
 gc_state_t state = TC_OFF;
 bd_addr_t server_addr;
@@ -132,8 +141,9 @@ void handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
           const uint8_t* value = gatt_event_notification_get_value(packet);
           DEBUG_LOG("Indication value len %d\n", value_length);
           if (value_length == 1) {
-            uint8_t temp = little_endian_read_16(value, 0);
-            printf("read temp %zu degc\n", temp);
+            player.move = little_endian_read_16(value, 0);
+            player.turn = true;
+            printf("Receive %zu\n", player.move);
           } else {
             printf("Unexpected length %d\n", value_length);
           }

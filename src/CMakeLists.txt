@@ -93,6 +93,7 @@ target_include_directories(tic_tac_toe_main_server PRIVATE
 # Set pico as client
 target_compile_definitions(tic_tac_toe_main_server PRIVATE
     RUNNING_AS_CLIENT=1
+    PLAYER_0
 )
 
 pico_enable_stdio_usb(tic_tac_toe_main_server 1)
@@ -132,6 +133,7 @@ target_include_directories(tic_tac_toe_main_client PRIVATE
 # Set pico as client
 target_compile_definitions(tic_tac_toe_main_client PRIVATE
     RUNNING_AS_CLIENT=1
+    PLAYER_1
 )
 
 pico_enable_stdio_usb(tic_tac_toe_main_client 1)

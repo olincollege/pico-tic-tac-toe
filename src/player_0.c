@@ -1,28 +1,50 @@
 #include <stdio.h>
 
-#define PLAYER_0 1
 #include "bt_client.h"
 #include "bt_server.h"
+#include "hardware/structs/rosc.h"
 
-bool turn = true;
+typedef struct {
+  bool turn;
+  bool turn_complete;
+  uint8_t last_move;
+  uint8_t move;
+} player_t;
+
+player_t player = {.turn = true,
+                   .turn_complete = false,
+                   .last_move = UINT8_MAX,
+                   .move = UINT8_MAX};
+
+uint8_t get_random_uint8_t(void) {
+  uint8_t ret;
+  for (size_t i = 0; i < 8; i++) {
+    ret |= (rosc_hw->randombit) << i;
+  }
+  return ret;
+}
 
 static void server_heartbeat_handler(struct btstack_timer_source* ts) {
   // static uint32_t counter = 0;
   // counter++;
 
+  if (player.turn) {
+    player.move = get_random_uint8_t();
+    player.turn_complete = true;
+  }
+
   // Update the temp every 10s
-  if (turn) {
-    poll_temp(7);
+  if (player.turn_complete) {
+    // poll_temp(7);
     if (le_notification_enabled) {
       att_server_request_can_send_now_event(con_handle);
     }
-    turn = false;
   }
 
-  // Invert the led
-  static int led_on = true;
-  led_on = !led_on;
-  cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, led_on);
+  // // Invert the led
+  // static int led_on = true;
+  // led_on = !led_on;
+  // cyw43_arch_gpio_put(CYW43_WL_GPeIO_LED_PIN, led_on);
 
   // Restart timer
   btstack_run_loop_set_timer(ts, HEARTBEAT_PERIOD_MS);
