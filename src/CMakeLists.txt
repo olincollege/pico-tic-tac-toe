@@ -109,11 +109,8 @@ include(${BTSTACK_ROOT}/example/CMakeLists.txt)
 
 pico_add_extra_outputs(tic_tac_toe_main_server)
 
-
-
-
 add_executable(tic_tac_toe_main_client
-    player_1.c
+    player_0.c
 )
 
 target_link_libraries(tic_tac_toe_main_client

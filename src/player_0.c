@@ -11,10 +11,18 @@ typedef struct {
   uint8_t move;
 } player_t;
 
+#ifdef PLAYER_0
 player_t player = {.turn = true,
                    .turn_complete = false,
                    .last_move = UINT8_MAX,
                    .move = UINT8_MAX};
+#endif
+#ifdef PLAYER_1
+player_t player = {.turn = false,
+                   .turn_complete = false,
+                   .last_move = UINT8_MAX,
+                   .move = UINT8_MAX};
+#endif
 
 uint8_t get_random_uint8_t(void) {
   uint8_t ret;
