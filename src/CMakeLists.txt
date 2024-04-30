@@ -25,7 +25,7 @@ add_library(bt_client
     bt_client.c
 )
 
-# gatt generation
+# gatt header generation
 # pico_btstack_make_gatt_header(bt_server PRIVATE "${CMAKE_CURRENT_LIST_DIR}/player_0_gatt.gatt")
 # pico_btstack_make_gatt_header(bt_server PRIVATE "${CMAKE_CURRENT_LIST_DIR}/player_1_gatt.gatt")
 
