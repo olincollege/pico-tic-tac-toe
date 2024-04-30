@@ -39,9 +39,6 @@ uint8_t get_random_uint8_t(void) {
 }
 
 static void server_heartbeat_handler(struct btstack_timer_source* ts) {
-  // static uint32_t counter = 0;
-  // counter++;
-
   if (player_temp.is_turn) {
     player_temp.move = get_random_uint8_t();
     player_temp.turn_complete = true;
@@ -151,9 +148,13 @@ int main() {
       if (button.exit_code == 0) {
         if (is_space_valid(gameboard, button.x, button.y)) {
           if (player1->isturn) {
+#ifdef PLAYER_0
             make_move(player1, gameboard, button.x, button.y);
+#endif
           } else if (player2->isturn) {
+#ifdef PLAYER_1
             make_move(player2, gameboard, button.x, button.y);
+#endif
           }
           set_board(gameboard->spaces);
           // check for win
@@ -163,8 +164,16 @@ int main() {
             game_over = 2;
           } else if (is_full(gameboard)) {
             game_over = 3;
-          } else {
+#ifdef PLAYER_0
+          } else if (player1->isturn) {
             next_turn(player1, player2);
+            player_temp.is_turn = player1->isturn;
+#endif
+#ifdef PLAYER_1
+          } else if (player2->isturn) {
+            next_turn(player1, player2);
+            player_temp.is_turn = player2->isturn;
+#endif
           }
         }
       }
