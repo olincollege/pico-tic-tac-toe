@@ -9,6 +9,7 @@
 typedef struct {
   bool is_turn;
   bool turn_complete;
+  bool incoming_turn;
   uint8_t last_move;
   uint8_t move;
 } player_t;
@@ -142,7 +143,8 @@ void handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
           DEBUG_LOG("Indication value len %d\n", value_length);
           if (value_length == 1) {
             player_temp.move = little_endian_read_16(value, 0);
-            player_temp.is_turn = true;
+            // player_temp.is_turn = true;
+            player_temp.incoming_turn = true;
             printf("Receive %zu\n", player_temp.move);
           } else {
             printf("Unexpected length %d\n", value_length);

@@ -13,6 +13,7 @@
 typedef struct {
   bool is_turn;
   bool turn_complete;
+  bool incoming_turn;
   uint8_t last_move;
   uint8_t move;
 } player_t;
@@ -20,12 +21,14 @@ typedef struct {
 #ifdef PLAYER_0
 player_t player_temp = {.is_turn = true,
                         .turn_complete = false,
+                        .incoming_turn = false,
                         .last_move = UINT8_MAX,
                         .move = UINT8_MAX};
 #endif
 #ifdef PLAYER_1
 player_t player_temp = {.is_turn = false,
                         .turn_complete = false,
+                        .incoming_turn = false,
                         .last_move = UINT8_MAX,
                         .move = UINT8_MAX};
 #endif
@@ -39,14 +42,14 @@ uint8_t get_random_uint8_t(void) {
 }
 
 static void server_heartbeat_handler(struct btstack_timer_source* ts) {
-  if (player_temp.is_turn) {
-    player_temp.move = get_random_uint8_t();
-    player_temp.turn_complete = true;
-  }
+  // if (player_temp.is_turn) {
+  //   player_temp.move = get_random_uint8_t();
+  // }
 
   // Update the temp every 10s
   if (player_temp.turn_complete) {
     // poll_temp(7);
+    // player_temp.move =
     if (le_notification_enabled) {
       att_server_request_can_send_now_event(con_handle);
     }
@@ -150,10 +153,14 @@ int main() {
           if (player1->isturn) {
 #ifdef PLAYER_0
             make_move(player1, gameboard, button.x, button.y);
+            player_temp.turn_complete = true;
+            player_temp.move = button.x + button.y * 4;
 #endif
           } else if (player2->isturn) {
 #ifdef PLAYER_1
             make_move(player2, gameboard, button.x, button.y);
+            player_temp.turn_complete = true;
+            player_temp.move = button.x + button.y * 4;
 #endif
           }
           set_board(gameboard->spaces);
@@ -164,40 +171,55 @@ int main() {
             game_over = 2;
           } else if (is_full(gameboard)) {
             game_over = 3;
-#ifdef PLAYER_0
-          } else if (player1->isturn) {
+            // #ifdef PLAYER_0
+            //           } else if (player1->isturn) {
+          } else {
             next_turn(player1, player2);
-            player_temp.is_turn = player1->isturn;
-#endif
-#ifdef PLAYER_1
-          } else if (player2->isturn) {
-            next_turn(player1, player2);
-            player_temp.is_turn = player2->isturn;
-#endif
+            // player_temp.is_turn = player1->isturn;
+            // #endif
+            // #ifdef PLAYER_1
+            // } else if (player2->isturn) {
+            // next_turn(player1, player2);
+            player_temp.is_turn = false;
+            // #endif
           }
         }
       }
-    } else {
-      // game over
-      // turn full board to winning color
-      if (game_over == 1) {
-        set_full_board(255, 0, 0);
-      } else if (game_over == 2) {
-        set_full_board(0, 0, 255);
-      } else if (game_over == 3) {
-        sleep_ms(500);  // see the last move
-        set_full_board(0, 255, 0);
-      }
-      // pause for a sec
-      sleep_ms(1000);
-      // set board back to normal
+      printf("Incoming dbg: %i", player_temp.incoming_turn);
+      if (player_temp.incoming_turn) {
+#ifdef PLAYER_0
+        make_move(player2, gameboard, player_temp.move % 4,
+                  (player_temp.move - player_temp.move % 4) / 4);
+#endif
+#ifdef PLAYER_1
+        make_move(player1, gameboard, player_temp.move % 4,
+                  (player_temp.move - player_temp.move % 4) / 4);
+#endif
+        next_turn(player1, player2);
 
-      // reset game
-      make_board(gameboard);
-      set_board(gameboard->spaces);
-      make_player(player1, 1, 1);
-      make_player(player2, 2, 0);
-      game_over = 0;
+        player_temp.incoming_turn = false;
+      } else {
+        // game over
+        // turn full board to winning color
+        if (game_over == 1) {
+          set_full_board(255, 0, 0);
+        } else if (game_over == 2) {
+          set_full_board(0, 0, 255);
+        } else if (game_over == 3) {
+          sleep_ms(500);  // see the last move
+          set_full_board(0, 255, 0);
+        }
+        // pause for a sec
+        sleep_ms(1000);
+        // set board back to normal
+
+        // reset game
+        make_board(gameboard);
+        set_board(gameboard->spaces);
+        make_player(player1, 1, 1);
+        make_player(player2, 2, 0);
+        game_over = 0;
+      }
     }
   }
   return 0;

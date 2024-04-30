@@ -12,6 +12,7 @@
 typedef struct {
   bool is_turn;
   bool turn_complete;
+  bool incoming_turn;
   uint8_t last_move;
   uint8_t move;
 } player_t;
