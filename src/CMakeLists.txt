@@ -9,6 +9,27 @@
 # library is used only in function bodies (PRIVATE), only in function
 # signatures/types (INTERFACE), or both (PUBLIC).
 
+add_library(keypad_wrapper
+        keypad_wrapper.cpp
+        )
+target_link_libraries(keypad_wrapper
+        pico_rgb_keypad
+        pico_stdlib
+        )
+
+add_library(tic_tac_toe
+        tic_tac_toe.c
+        tic_tac_toe.h)
+
+add_executable(tic_tac_toe_main
+        pico_main.c
+        )
+target_link_libraries(tic_tac_toe_main PRIVATE 
+        tic_tac_toe 
+        keypad_wrapper)
+
+pico_add_extra_outputs(tic_tac_toe_main)
+
 # gatt libs
 add_library(player_0_gatt
     player_0_gatt.c
