@@ -146,6 +146,7 @@ int main() {
 
   while (true) {
     if (game_over == 0) {
+      // printf("My turn: %i\n", player_temp.is_turn);
       // get button input
       button_coords button = get_button_press(&last_button_states);
       if (button.exit_code == 0) {
@@ -171,22 +172,22 @@ int main() {
             game_over = 2;
           } else if (is_full(gameboard)) {
             game_over = 3;
-            // #ifdef PLAYER_0
-            //           } else if (player1->isturn) {
-          } else {
+#ifdef PLAYER_0
+          } else if (player1->isturn) {
             next_turn(player1, player2);
-            // player_temp.is_turn = player1->isturn;
-            // #endif
-            // #ifdef PLAYER_1
-            // } else if (player2->isturn) {
-            // next_turn(player1, player2);
             player_temp.is_turn = false;
-            // #endif
+#endif
+#ifdef PLAYER_1
+          } else if (player2->isturn) {
+            next_turn(player1, player2);
+            player_temp.is_turn = false;
+#endif
           }
         }
       }
-      printf("Incoming dbg: %i", player_temp.incoming_turn);
-      if (player_temp.incoming_turn) {
+      if ((player_temp.incoming_turn) && (player_temp.move < 16)) {
+        printf("Incoming dbg: %i\n", player_temp.incoming_turn);
+        printf("Incoming value: %i\n", player_temp.move);
 #ifdef PLAYER_0
         make_move(player2, gameboard, player_temp.move % 4,
                   (player_temp.move - player_temp.move % 4) / 4);
@@ -195,31 +196,50 @@ int main() {
         make_move(player1, gameboard, player_temp.move % 4,
                   (player_temp.move - player_temp.move % 4) / 4);
 #endif
-        next_turn(player1, player2);
+        set_board(gameboard->spaces);
+        // check for win
+        if (player_win(player1, gameboard)) {
+          game_over = 1;
+        } else if (player_win(player2, gameboard)) {
+          game_over = 2;
+        } else if (is_full(gameboard)) {
+          game_over = 3;
+#ifdef PLAYER_0
+        } else if (player2->isturn) {
+          next_turn(player1, player2);
+          printf("Testing\n");
+          player_temp.is_turn = true;
+#endif
+#ifdef PLAYER_1
+        } else if (player1->isturn) {
+          next_turn(player1, player2);
+          player_temp.is_turn = true;
+#endif
+        }
 
         player_temp.incoming_turn = false;
-      } else {
-        // game over
-        // turn full board to winning color
-        if (game_over == 1) {
-          set_full_board(255, 0, 0);
-        } else if (game_over == 2) {
-          set_full_board(0, 0, 255);
-        } else if (game_over == 3) {
-          sleep_ms(500);  // see the last move
-          set_full_board(0, 255, 0);
-        }
-        // pause for a sec
-        sleep_ms(1000);
-        // set board back to normal
-
-        // reset game
-        make_board(gameboard);
-        set_board(gameboard->spaces);
-        make_player(player1, 1, 1);
-        make_player(player2, 2, 0);
-        game_over = 0;
       }
+    } else {
+      // game over
+      // turn full board to winning color
+      if (game_over == 1) {
+        set_full_board(255, 0, 0);
+      } else if (game_over == 2) {
+        set_full_board(0, 0, 255);
+      } else if (game_over == 3) {
+        sleep_ms(500);  // see the last move
+        set_full_board(0, 255, 0);
+      }
+      // pause for a sec
+      sleep_ms(1000);
+      // set board back to normal
+
+      // reset game
+      make_board(gameboard);
+      set_board(gameboard->spaces);
+      make_player(player1, 1, 1);
+      make_player(player2, 2, 0);
+      game_over = 0;
     }
   }
   return 0;
