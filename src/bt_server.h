@@ -16,7 +16,7 @@
 #include "player_1_gatt.h"
 #endif
 
-#define HEARTBEAT_PERIOD_MS 1000
+#define HEARTBEAT_PERIOD_MS 10
 
 // extern bool turn;
 // extern bool turn_complete;

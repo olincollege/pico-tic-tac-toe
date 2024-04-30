@@ -7,13 +7,13 @@
 #endif
 
 typedef struct {
-  bool turn;
+  bool is_turn;
   bool turn_complete;
   uint8_t last_move;
   uint8_t move;
 } player_t;
 
-extern player_t player;
+extern player_t player_temp;
 
 btstack_packet_callback_registration_t client_hci_event_callback_registration;
 gc_state_t state = TC_OFF;
@@ -141,9 +141,9 @@ void handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
           const uint8_t* value = gatt_event_notification_get_value(packet);
           DEBUG_LOG("Indication value len %d\n", value_length);
           if (value_length == 1) {
-            player.move = little_endian_read_16(value, 0);
-            player.turn = true;
-            printf("Receive %zu\n", player.move);
+            player_temp.move = little_endian_read_16(value, 0);
+            player_temp.is_turn = true;
+            printf("Receive %zu\n", player_temp.move);
           } else {
             printf("Unexpected length %d\n", value_length);
           }

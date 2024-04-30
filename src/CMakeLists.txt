@@ -21,14 +21,14 @@ add_library(tic_tac_toe
         tic_tac_toe.c
         tic_tac_toe.h)
 
-add_executable(tic_tac_toe_main
-        pico_main.c
-        )
-target_link_libraries(tic_tac_toe_main PRIVATE 
-        tic_tac_toe 
-        keypad_wrapper)
+# add_executable(tic_tac_toe_main
+#         pico_main.c
+#         )
+# target_link_libraries(tic_tac_toe_main PRIVATE 
+#         tic_tac_toe 
+#         keypad_wrapper)
 
-pico_add_extra_outputs(tic_tac_toe_main)
+# pico_add_extra_outputs(tic_tac_toe_main)
 
 # gatt libs
 add_library(player_0_gatt
@@ -76,7 +76,7 @@ target_include_directories(bt_client PRIVATE
 
 # Player 0
 add_executable(player_0
-    pico_tic_tac_toe.c
+    pico_main.c
 )
 
 target_link_libraries(player_0
@@ -87,6 +87,8 @@ target_link_libraries(player_0
   bt_server
   player_0_gatt
   bt_client
+  tic_tac_toe
+  keypad_wrapper
 )
 
 # For btstack_config.h
@@ -107,7 +109,7 @@ pico_add_extra_outputs(player_0)
 
 # Player 1
 add_executable(player_1
-pico_tic_tac_toe.c
+pico_main.c
 )
 
 target_link_libraries(player_1
@@ -118,6 +120,8 @@ target_link_libraries(player_1
     bt_client
     player_1_gatt
     bt_server
+    tic_tac_toe
+    keypad_wrapper
     )
 target_include_directories(player_1 PRIVATE
     ${CMAKE_CURRENT_LIST_DIR} # For btstack config
