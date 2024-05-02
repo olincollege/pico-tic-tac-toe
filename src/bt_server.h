@@ -63,13 +63,42 @@ static const uint8_t adv_data_len = sizeof(adv_data);
 extern int le_notification_enabled;
 extern hci_con_handle_t con_handle;
 
+/**
+ * Handle outgoing packets from the server.
+ *
+ * @param packet_type The packet type to be sent.
+ * @param channel UNUSED
+ * @param packet A pointer to packet to be sent.
+ * @param size UNUSED
+ */
 void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
                     uint16_t size);
 
+/**
+ * A callback to run after reading a Bluetooth characteristic.
+ *
+ * @param connection_handle UNUSED
+ * @param att_handle The att connetion handle to read on.
+ * @param offset The number of bits to offset the read.
+ * @param buffer A pointer to a buffer to place the read data.
+ * @param buffer_size The number of btyes in the buffer.
+ * @return The blob size read, 0 if no data.
+ */
 uint16_t att_read_callback(hci_con_handle_t connection_handle,
                            uint16_t att_handle, uint16_t offset,
                            uint8_t* buffer, uint16_t buffer_size);
 
+/**
+ * A callback to run after writing a Bluetooth characteristic.
+ *
+ * @param connection_handle A Bluetooth connection handle.
+ * @param att_handle The att connetion handle to read on.
+ * @param transaction_mode UNUSED
+ * @param offset UNUSED
+ * @param buffer A pointer to a buffer to place the read data.
+ * @param buffer_size UNUSED
+ * @return 0 if successful.
+ */
 int att_write_callback(hci_con_handle_t connection_handle, uint16_t att_handle,
                        uint16_t transaction_mode, uint16_t offset,
                        uint8_t* buffer, uint16_t buffer_size);

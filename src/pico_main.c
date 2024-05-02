@@ -33,7 +33,7 @@ player_t _player = {.is_turn = false,
                     .move = UINT8_MAX};
 #endif
 
-uint8_t get_random_uint8_t(void) {
+static uint8_t get_random_uint8_t(void) {
   uint8_t ret;
   for (size_t i = 0; i < 8; i++) {
     ret |= (rosc_hw->randombit) << i;

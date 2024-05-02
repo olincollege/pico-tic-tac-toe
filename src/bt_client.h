@@ -36,13 +36,41 @@ extern bool listener_registered;
 extern gatt_client_notification_t notification_listener;
 extern btstack_timer_source_t client_heartbeat;
 
+/**
+ * Determine if an advertised Bluetooth connection contains a particular
+ * service.
+ *
+ * @param service A Bluetooth service.
+ * @param advertisement_report The report of a advertising Bluetooth device.
+ * @return True if the advertisment contains a particular service, false
+ * otherwise.
+ */
 bool advertisement_report_contains_service(uint16_t service,
                                            uint8_t* advertisement_report);
 
+/**
+ * Handle a Bluetooth characteristic change sent by a Bluetooth server.
+ *
+ * @param packet_type The packet type to receive.
+ * @param channel UNUSED
+ * @param packet A buffer to store the packet.
+ * @param size UNUSED
+ */
 void handle_gatt_client_event(uint8_t packet_type, uint16_t channel,
                               uint8_t* packet, uint16_t size);
 
+/**
+ * Start the client and start scanning for a particular Bluetooth device.
+ */
 void client_start(void);
 
+/**
+ * Handle all all client-related events.
+ *
+ * @param packet_type The packet type to accept.
+ * @param channel UNUSED
+ * @param packet A buffer to accept a packet.
+ * @param size UNUSED
+ */
 void hci_event_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
                        uint16_t size);
