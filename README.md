@@ -82,13 +82,13 @@ Alternatively, configure VSCode to build [explained here in section 7](https://d
 
 ## Load and Run on the Picos
 
-**Option 1:** Use the flashing script
+#### Option 1: Use the flashing script
 
 Build and install `picotool`, available [here](https://github.com/raspberrypi/picotool). Note that using `picotool` with the flash script requires building from source, adding to path, and setting neccesary udev rules. Full details are available in the `picotool` README.
 
 Plug in both Picos to the computer with a micro USB cable, and run `./flash.sh` from the root directory.
 
-**Option 2:** Manual flashing
+#### Option 2: Manual flashing
 
 Plug in both Picos to the computer with micro USB cables while pressing and holding the `BOOTSEL` buttons. Release the buttons when the Picos is plugged in.
 
