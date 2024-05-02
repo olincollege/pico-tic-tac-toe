@@ -80,8 +80,16 @@ $ make
 
 Alternatively, configure VSCode to build [explained here in section 7](https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf)
 
-## Load and Run on the Pico
+## Load and Run on the Picos
 
-Plug in the Pico to the computer with a micro USB cable while pressing and holding the `BOOTSEL` button. Release the button when the Pico is plugged in.
+#### Option 1: Use the flashing script
 
-Find and copy the UF2 file from `build/src` to the Pico (it should appear as a storage device named *RPI-RP2*).
+Build and install `picotool`, available [here](https://github.com/raspberrypi/picotool). Note that using `picotool` with the flash script requires building from source, adding to path, and setting neccesary udev rules. Full details are available in the `picotool` README.
+
+Plug in both Picos to the computer with a micro USB cable, and run `./flash.sh` from the root directory.
+
+#### Option 2: Manual flashing
+
+Plug in both Picos to the computer with micro USB cables while pressing and holding the `BOOTSEL` buttons. Release the buttons when the Picos is plugged in.
+
+Find and copy the UF2 files from `build/src` to the Pico (it should appear as a storage device named *RPI-RP2*). The default file names are `player_0.uf2` and `player_1.uf2`.
