@@ -1,10 +1,24 @@
 # Handheld Tic-Tac-Toe with Raspberry Pi Pico
 
-Kat Canavan, Drew Pang, Miranda Pietraski 
+Kat Canavan, Drew Pang, Miranda Pietraski
 
-[Final Project Description]
+Inspired by the handheld games we played growing up, we decided to add a new twist to a timeless classic by making a bluetooth-enabled 4x4 tic-tac-toe game with the Raspberry Pi Pico and Pimoroni RGB keypad base.
 
-[Note to selves: we should include the final build files on Github so people don't have to compile themselves]
+<div align="center">
+    <img src="demo/picodemo30fps.gif">
+</div>
+
+### Features
+
+- **Onboard Computing**: Our system is self-sufficient, handling all computations internally. The only cable you'll need is for power.
+
+- **Bright LED Display**: Play in any lighting condition- even outside!
+
+- **Effortless Connectivity**: With automatic pairing and a Bluetooth range of up to 30 meters, you're free to move around without losing connection.
+
+- **Instant Response**: Experience real-time interaction. The moment you press a button, the action is mirrored on both devices.
+
+- **Endless Play**: Once the buttons flash red, blue, or green (for a tie), the board automatically resets for the next round so you can enjoy endless competitive rematches.
 
 ## Materials
 
@@ -49,9 +63,9 @@ $ git clone https://github.com/raspberrypi/pico-examples.git --branch master
 
 #### Toolchain
 
-Follow the [Official Raspberry Pi Setup Guide](https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf) to configure your operating system to build. Replace instructions for the `pico-instructions` repo with *this* repo when applicable.
+Follow the [Official Raspberry Pi Setup Guide](https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf) to configure your operating system to build. Replace instructions for the `pico-instructions` repo with _this_ repo when applicable.
 
-- Section 9 for Mac/ Windows. 
+- Section 9 for Mac/ Windows.
 
 - Section 2.2 for Linux
 
@@ -68,6 +82,6 @@ Alternatively, configure VSCode to build [explained here in section 7](https://d
 
 ## Load and Run on the Pico
 
-Plug in the Pico to the computer with a micro USB cable while pressing and holding the `BOOTSEL` button. Release the button when the Pico is plugged in. 
+Plug in the Pico to the computer with a micro USB cable while pressing and holding the `BOOTSEL` button. Release the button when the Pico is plugged in.
 
 Find and copy the UF2 file from `build/src` to the Pico (it should appear as a storage device named *RPI-RP2*).
