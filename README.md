@@ -2,9 +2,27 @@
 
 Kat Canavan, Drew Pang, Miranda Pietraski 
 
+Inspired by the handheld games we played growing up, we decided to add a new twist to a timeless classic by making a bluetooth-enabled 4x4 tic-tac-toe game with the Raspberry Pi Pico and Pimoroni RGB keypad base.
+
 <div align="center">
     <img src="demo/picodemo30fps.gif">
 </div>
+
+### Features
+
+* **Onboard Computing**: Our system is self-sufficient, handling all computations internally. The only cable you'll need is for power.
+
+* **Bright LED Display**: Play in any lighting condition- even outside!
+
+* **Effortless Connectivity**: With automatic pairing and a Bluetooth range of up to 30 meters, you're free to move around without losing connection.
+
+* **Instant Response**: Experience real-time interaction. The moment you press a button, the action is mirrored on both devices.
+
+* **Endless Play**: Once the buttons flash red, blue, or green (for a tie), the board automatically resets for the next round so you can enjoy endless competitive rematches.
+
+* 
+
+
 
 ## Materials
 
