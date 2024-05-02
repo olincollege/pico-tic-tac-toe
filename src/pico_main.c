@@ -118,7 +118,7 @@ int main() {
   hci_power_control(HCI_POWER_ON);
 
   // game setup
-  board* gameboard = malloc(sizeof(board));  // todo should handle errors
+  board* gameboard = malloc(sizeof(board));
   player* player1 = malloc(sizeof(player));
   player* player2 = malloc(sizeof(player));
   make_board(gameboard);
