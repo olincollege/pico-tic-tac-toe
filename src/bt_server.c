@@ -7,7 +7,6 @@
 #include "pico/btstack_cyw43.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
-// #include "player_0_gatt.h"
 
 typedef struct {
   bool is_turn;
