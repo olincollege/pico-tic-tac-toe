@@ -19,18 +19,18 @@ typedef struct {
 } player_t;
 
 #ifdef PLAYER_0
-player_t player_temp = {.is_turn = true,
-                        .turn_complete = false,
-                        .incoming_turn = false,
-                        .last_move = UINT8_MAX,
-                        .move = UINT8_MAX};
+player_t _player = {.is_turn = true,
+                    .turn_complete = false,
+                    .incoming_turn = false,
+                    .last_move = UINT8_MAX,
+                    .move = UINT8_MAX};
 #endif
 #ifdef PLAYER_1
-player_t player_temp = {.is_turn = false,
-                        .turn_complete = false,
-                        .incoming_turn = false,
-                        .last_move = UINT8_MAX,
-                        .move = UINT8_MAX};
+player_t _player = {.is_turn = false,
+                    .turn_complete = false,
+                    .incoming_turn = false,
+                    .last_move = UINT8_MAX,
+                    .move = UINT8_MAX};
 #endif
 
 uint8_t get_random_uint8_t(void) {
@@ -42,23 +42,12 @@ uint8_t get_random_uint8_t(void) {
 }
 
 static void server_heartbeat_handler(struct btstack_timer_source* ts) {
-  // if (player_temp.is_turn) {
-  //   player_temp.move = get_random_uint8_t();
-  // }
-
-  // Update the temp every 10s
-  if (player_temp.turn_complete) {
-    // poll_temp(7);
-    // player_temp.move =
+  // Send a player's turn if it is complete
+  if (_player.turn_complete) {
     if (le_notification_enabled) {
       att_server_request_can_send_now_event(con_handle);
     }
   }
-
-  // // Invert the led
-  // static int led_on = true;
-  // led_on = !led_on;
-  // cyw43_arch_gpio_put(CYW43_WL_GPeIO_LED_PIN, led_on);
 
   // Restart timer
   btstack_run_loop_set_timer(ts, HEARTBEAT_PERIOD_MS);
@@ -77,8 +66,6 @@ static void client_heartbeat_handler(struct btstack_timer_source* ts) {
   } else if (!listener_registered) {
     quick_flash = false;
   }
-
-  // Check if move is new, if so, now player 1's turn
 
   // Restart timer
   btstack_run_loop_set_timer(ts, (led_on || quick_flash)
@@ -146,7 +133,6 @@ int main() {
 
   while (true) {
     if (game_over == 0) {
-      // printf("My turn: %i\n", player_temp.is_turn);
       // get button input
       button_coords button = get_button_press(&last_button_states);
       if (button.exit_code == 0) {
@@ -154,14 +140,14 @@ int main() {
           if (player1->isturn) {
 #ifdef PLAYER_0
             make_move(player1, gameboard, button.x, button.y);
-            player_temp.turn_complete = true;
-            player_temp.move = button.x + button.y * 4;
+            _player.turn_complete = true;
+            _player.move = button.x + button.y * 4;
 #endif
           } else if (player2->isturn) {
 #ifdef PLAYER_1
             make_move(player2, gameboard, button.x, button.y);
-            player_temp.turn_complete = true;
-            player_temp.move = button.x + button.y * 4;
+            _player.turn_complete = true;
+            _player.move = button.x + button.y * 4;
 #endif
           }
           set_board(gameboard->spaces);
@@ -175,26 +161,26 @@ int main() {
 #ifdef PLAYER_0
           } else if (player1->isturn) {
             next_turn(player1, player2);
-            player_temp.is_turn = false;
+            _player.is_turn = false;
 #endif
 #ifdef PLAYER_1
           } else if (player2->isturn) {
             next_turn(player1, player2);
-            player_temp.is_turn = false;
+            _player.is_turn = false;
 #endif
           }
         }
       }
-      if ((player_temp.incoming_turn) && (player_temp.move < 16)) {
-        printf("Incoming dbg: %i\n", player_temp.incoming_turn);
-        printf("Incoming value: %i\n", player_temp.move);
+      if ((_player.incoming_turn) && (_player.move < 16)) {
+        // printf("Incoming dbg: %i\n", _player.incoming_turn);
+        // printf("Incoming value: %i\n", _player.move);
 #ifdef PLAYER_0
-        make_move(player2, gameboard, player_temp.move % 4,
-                  (player_temp.move - player_temp.move % 4) / 4);
+        make_move(player2, gameboard, _player.move % 4,
+                  (_player.move - _player.move % 4) / 4);
 #endif
 #ifdef PLAYER_1
-        make_move(player1, gameboard, player_temp.move % 4,
-                  (player_temp.move - player_temp.move % 4) / 4);
+        make_move(player1, gameboard, _player.move % 4,
+                  (_player.move - _player.move % 4) / 4);
 #endif
         set_board(gameboard->spaces);
         // check for win
@@ -207,17 +193,16 @@ int main() {
 #ifdef PLAYER_0
         } else if (player2->isturn) {
           next_turn(player1, player2);
-          printf("Testing\n");
-          player_temp.is_turn = true;
+          _player.is_turn = true;
 #endif
 #ifdef PLAYER_1
         } else if (player1->isturn) {
           next_turn(player1, player2);
-          player_temp.is_turn = true;
+          _player.is_turn = true;
 #endif
         }
 
-        player_temp.incoming_turn = false;
+        _player.incoming_turn = false;
       }
     } else {
       // game over

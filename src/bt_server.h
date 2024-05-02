@@ -18,11 +18,6 @@
 
 #define HEARTBEAT_PERIOD_MS 10
 
-// extern bool turn;
-// extern bool turn_complete;
-// extern uint8_t last_move;
-// extern uint8_t move;
-
 extern btstack_timer_source_t server_heartbeat;
 extern btstack_packet_callback_registration_t
     server_hci_event_callback_registration;
@@ -78,7 +73,3 @@ uint16_t att_read_callback(hci_con_handle_t connection_handle,
 int att_write_callback(hci_con_handle_t connection_handle, uint16_t att_handle,
                        uint16_t transaction_mode, uint16_t offset,
                        uint8_t* buffer, uint16_t buffer_size);
-
-void poll_temp(uint8_t move);
-
-// static void heartbeat_handler(struct btstack_timer_source* ts);

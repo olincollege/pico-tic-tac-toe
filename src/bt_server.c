@@ -17,7 +17,7 @@ typedef struct {
   uint8_t move;
 } player_t;
 
-extern player_t player_temp;
+extern player_t _player;
 
 hci_con_handle_t con_handle;
 int le_notification_enabled;
@@ -50,22 +50,19 @@ void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t* packet,
       gap_advertisements_set_data(adv_data_len, (uint8_t*)adv_data);
       gap_advertisements_enable(1);
 
-      // poll_temp();
-      // printf("%zu\n", player_temp.move);
-
       break;
     case HCI_EVENT_DISCONNECTION_COMPLETE:
       le_notification_enabled = 0;
       break;
     case ATT_EVENT_CAN_SEND_NOW:
-      printf("Send %zu\n", player_temp.move);
-      player_temp.last_move = player_temp.move;
-      player_temp.is_turn = false;
-      player_temp.turn_complete = false;
+      printf("Send %zu\n", _player.move);
+      _player.last_move = _player.move;
+      _player.is_turn = false;
+      _player.turn_complete = false;
       att_server_notify(
           con_handle,
           ATT_CHARACTERISTIC_ORG_BLUETOOTH_CHARACTERISTIC_TEMPERATURE_01_VALUE_HANDLE,
-          (uint8_t*)&player_temp.move, sizeof(player_temp.move));
+          (uint8_t*)&_player.move, sizeof(_player.move));
       break;
     default:
       break;
@@ -79,9 +76,9 @@ uint16_t att_read_callback(hci_con_handle_t connection_handle,
 
   if (att_handle ==
       ATT_CHARACTERISTIC_ORG_BLUETOOTH_CHARACTERISTIC_TEMPERATURE_01_VALUE_HANDLE) {
-    return att_read_callback_handle_blob((const uint8_t*)&player_temp.move,
-                                         sizeof(player_temp.move), offset,
-                                         buffer, buffer_size);
+    return att_read_callback_handle_blob((const uint8_t*)&_player.move,
+                                         sizeof(_player.move), offset, buffer,
+                                         buffer_size);
   }
   return 0;
 }
@@ -105,32 +102,3 @@ int att_write_callback(hci_con_handle_t connection_handle, uint16_t att_handle,
   }
   return 0;
 }
-
-void poll_temp(uint8_t move) {
-  // deg_c++;
-  player_temp.move = move;
-  printf("Write temp %zu degc\n", player_temp.move);
-}
-
-// static void heartbeat_handler(struct btstack_timer_source* ts) {
-//   // static uint32_t counter = 0;
-//   // counter++;
-
-//   // Update the temp every 10s
-//   if (turn) {
-//     poll_temp(7);
-//     if (le_notification_enabled) {
-//       att_server_request_can_send_now_event(con_handle);
-//     }
-//     turn = false;
-//   }
-
-//   // Invert the led
-//   static int led_on = true;
-//   led_on = !led_on;
-//   cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, led_on);
-
-//   // Restart timer
-//   btstack_run_loop_set_timer(ts, HEARTBEAT_PERIOD_MS);
-//   btstack_run_loop_add_timer(ts);
-// }
