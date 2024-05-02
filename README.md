@@ -2,9 +2,9 @@
 
 Kat Canavan, Drew Pang, Miranda Pietraski 
 
-[Final Project Description]
-
-[Note to selves: we should include the final build files on Github so people don't have to compile themselves]
+<div align="center">
+    <img src="demo/picodemo30fps.gif">
+</div>
 
 ## Materials
 
