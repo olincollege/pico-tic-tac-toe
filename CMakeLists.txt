@@ -14,6 +14,8 @@ endif()
 
 # Initialize the SDK
 pico_sdk_init()
+set(PICO_BOARD pico_w)
+
 
 add_compile_options(-Wall
         -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
@@ -23,12 +25,14 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
     add_compile_options(-Wno-maybe-uninitialized)
 endif()
 
-# Include keypad library
-add_subdirectory(keypad_lib)
-
 # Include the source files.
 add_subdirectory(src)
 
+# Include bluetooth
+include_directories(/usr/include/bluetooth)
+
+# Include keypad library
+add_subdirectory(keypad_lib)
 
 set(CMAKE_C_FLAGS "-Wall -Wextra")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic")

@@ -21,11 +21,112 @@ add_library(tic_tac_toe
         tic_tac_toe.c
         tic_tac_toe.h)
 
-add_executable(tic_tac_toe_main
-        pico_main.c
-        )
-target_link_libraries(tic_tac_toe_main PRIVATE 
-        tic_tac_toe 
-        keypad_wrapper)
+# gatt libs
+add_library(player_0_gatt
+    player_0_gatt.c
+)
+add_library(player_1_gatt
+    player_1_gatt.c
+)
 
-pico_add_extra_outputs(tic_tac_toe_main)
+# bt libs
+add_library(bt_server
+    bt_server.c
+)
+add_library(bt_client
+    bt_client.c
+)
+
+# gatt header generation
+# pico_btstack_make_gatt_header(bt_server PRIVATE "${CMAKE_CURRENT_LIST_DIR}/player_0_gatt.gatt")
+# pico_btstack_make_gatt_header(bt_server PRIVATE "${CMAKE_CURRENT_LIST_DIR}/player_1_gatt.gatt")
+
+# link deps to bt libs
+target_link_libraries(bt_server
+    pico_stdlib
+    pico_btstack_ble
+    pico_cyw43_arch_none
+    pico_btstack_cyw43
+    player_0_gatt
+    player_1_gatt
+)
+target_link_libraries(bt_client
+    pico_stdlib
+    pico_btstack_cyw43
+    pico_cyw43_arch_none
+    pico_btstack_ble
+)
+
+# For btstack_config.h
+target_include_directories(bt_server PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}
+)
+target_include_directories(bt_client PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}
+)
+
+# Player 0
+add_executable(player_0
+    pico_main.c
+)
+
+target_link_libraries(player_0
+  pico_stdlib
+  pico_btstack_ble
+  pico_btstack_cyw43
+  pico_cyw43_arch_none
+  bt_server
+  player_0_gatt
+  bt_client
+  tic_tac_toe
+  keypad_wrapper
+)
+
+# For btstack_config.h
+target_include_directories(player_0 PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}
+)
+# Set pico as player 0
+target_compile_definitions(player_0 PRIVATE
+    RUNNING_AS_CLIENT=1
+    PLAYER_0
+)
+
+# Debug printing over usb
+pico_enable_stdio_usb(player_0 1)
+pico_enable_stdio_uart(player_0 0)
+
+pico_add_extra_outputs(player_0)
+
+# Player 1
+add_executable(player_1
+pico_main.c
+)
+
+target_link_libraries(player_1
+    pico_stdlib
+    pico_btstack_ble
+    pico_btstack_cyw43
+    pico_cyw43_arch_none
+    bt_client
+    player_1_gatt
+    bt_server
+    tic_tac_toe
+    keypad_wrapper
+    )
+target_include_directories(player_1 PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR} # For btstack config
+    )
+
+
+# Set pico as player 0
+target_compile_definitions(player_1 PRIVATE
+    RUNNING_AS_CLIENT=1
+    PLAYER_1
+)
+
+# Debug printing over usb
+pico_enable_stdio_usb(player_1 1)
+pico_enable_stdio_uart(player_1 0)
+
+pico_add_extra_outputs(player_1)

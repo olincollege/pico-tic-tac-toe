@@ -90,7 +90,7 @@ int diag_win(player* player_, board* board_) {
     }
   }
   for (size_t i = 0; i < board_->dim; i++) {
-    if (board_->spaces[board_->dim -1 - i][i] != player_->symb) {
+    if (board_->spaces[board_->dim - 1 - i][i] != player_->symb) {
       break;
     }
     if (i == board_->dim - 1) {

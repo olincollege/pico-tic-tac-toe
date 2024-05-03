@@ -1,0 +1,6 @@
+[submodule "deps/pico-sdk"]
+	path = deps/pico-sdk
+	url = git@github.com:raspberrypi/pico-sdk.git
+[submodule "deps/btstack"]
+	path = deps/btstack
+	url = git@github.com:bluekitchen/btstack.git
