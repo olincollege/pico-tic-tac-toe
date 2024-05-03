@@ -2,8 +2,6 @@
 
 #include <stdio.h>
 
-#include <cstdint>
-
 #include "pico/stdlib.h"
 #include "pico_rgb_keypad.hpp"
 
@@ -62,7 +60,7 @@ void set_full_board(uint8_t r, uint8_t g, uint8_t b) {
 button_coords get_button_press(uint16_t* last_button_states) {
   button_coords coords;
   coords.exit_code = 1;  // exit code 1 means no button was pressed
-  uint16_t button_states = get_button_states();
+  uint16_t button_states = get_keypad_state();
   if (button_states != *last_button_states) {
     for (int i = 0; i < 16; i++) {
       if (button_states & (1 << i)) {  // get index of button pressed

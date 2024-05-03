@@ -2,6 +2,9 @@
 // this file can be used by both C and C++ code
 #ifdef __cplusplus
 extern "C" {
+    #include <cstdint>
+#else
+    #include <stdint.h>
 #endif
 
 // a struct to hold the x and y coordinates of a button press
